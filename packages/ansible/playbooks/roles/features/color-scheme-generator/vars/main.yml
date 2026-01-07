@@ -1,0 +1,5 @@
+# playbooks/roles/features/color-scheme-generator/vars/main.yml
+---
+# Internal constants (not meant to be overridden)
+color_scheme_core_dir: "{{ color_scheme_install_dest }}/core"
+color_scheme_orchestrator_dir: "{{ color_scheme_install_dest }}/orchestrator"

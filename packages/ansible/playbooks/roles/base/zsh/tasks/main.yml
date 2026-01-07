@@ -1,0 +1,21 @@
+- name: Install zsh and related packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ zsh_packages_map.get(ansible_facts['distribution'], []) }}"
+    state: present
+
+- name: Set distribution-specific plugin paths
+  ansible.builtin.set_fact:
+    ZSH_SYNTAX_HIGHLIGHTING: "{{ zsh_plugin_paths_map.get(ansible_facts['distribution'], {}).get('syntax_highlighting', '') }}"
+    ZSH_AUTOSUGGESTIONS: "{{ zsh_plugin_paths_map.get(ansible_facts['distribution'], {}).get('autosuggestions', '') }}"
+    ZSH_HISTORY_SUBSTRING_SEARCH: "{{ zsh_plugin_paths_map.get(ansible_facts['distribution'], {}).get('history_substring_search', '') }}"
+    FZF_KEY_BINDINGS: "{{ zsh_plugin_paths_map.get(ansible_facts['distribution'], {}).get('fzf_key_bindings', '') }}"
+    FZF_COMPLETION: "{{ zsh_plugin_paths_map.get(ansible_facts['distribution'], {}).get('fzf_completion', '') }}"
+  when: zsh_use_distro_paths | default(true)
+
+- name: Render .zshrc from template
+  ansible.builtin.template:
+    src: "{{ zsh_template_src }}"
+    dest: "{{ zsh_config_dest }}"
+    mode: "0644"
+    backup: true

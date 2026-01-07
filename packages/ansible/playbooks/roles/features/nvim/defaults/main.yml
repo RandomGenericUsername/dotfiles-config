@@ -1,0 +1,2 @@
+nvim_config_dest: "{{ xdg_config_home }}/nvim"
+nvim_config_src_dir: "{{ config_files_root }}/nvim"

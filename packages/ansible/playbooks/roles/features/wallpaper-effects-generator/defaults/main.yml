@@ -1,0 +1,17 @@
+# playbooks/roles/features/wallpaper-effects-generator/defaults/main.yml
+---
+# Installation destination (override with -e wallpaper_effects_install_dest=/path)
+wallpaper_effects_install_dest: "{{ xdg_data_home }}/wallpaper-effects-generator"
+
+# Repository configuration
+wallpaper_effects_repo_url: "https://github.com/RandomGenericUsername/wallpaper-effects-generator"
+wallpaper_effects_repo_version: "master"
+
+# Docker build toggle
+wallpaper_effects_build_docker: true
+
+# Docker image name
+wallpaper_effects_image: "wallpaper-effects"
+
+# For zsh template integration
+WALLPAPER_EFFECTS_BIN_DIR: "{{ wallpaper_effects_install_dest }}/orchestrator"

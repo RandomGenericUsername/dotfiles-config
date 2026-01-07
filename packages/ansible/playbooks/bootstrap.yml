@@ -1,0 +1,34 @@
+- name: Dotfiles engine (local)
+  hosts: localhost
+  gather_facts: true
+
+  pre_tasks:
+    - name: Show available tags
+      ansible.builtin.debug:
+        msg:
+          - "No tags specified. Available tags:"
+          - "  --tags zsh                         : Install and configure Zsh shell"
+          - "  --tags nvim                        : Install and configure Neovim"
+          - "  --tags color-scheme-generator      : Install color scheme generator"
+          - "  --tags wallpaper-effects-generator : Install wallpaper effects generator"
+          - "  --tags debug                       : Show debug information"
+          - ""
+          - "Example: ansible-playbook -i inventory/localhost.yml playbooks/bootstrap.yml --tags zsh --ask-become-pass"
+
+    - name: Debug paths
+      ansible.builtin.debug:
+        msg:
+          - "playbook_dir={{ playbook_dir }}"
+          - "dotfiles_root={{ dotfiles_root | default('UNDEFINED') }}"
+          - "config_files_root={{ config_files_root | default('UNDEFINED') }}"
+      tags: [debug]
+
+  roles:
+    - role: zsh
+      tags: [zsh, never]
+    - role: nvim
+      tags: [nvim, never]
+    - role: color-scheme-generator
+      tags: [color-scheme-generator, never]
+    - role: wallpaper-effects-generator
+      tags: [wallpaper-effects-generator, never]

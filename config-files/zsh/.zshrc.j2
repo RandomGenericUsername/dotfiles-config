@@ -1,0 +1,89 @@
+# Set the path to the Starship config file
+export STARSHIP_CONFIG="{{STARSHIP_CONFIG}}"
+
+export ZSH="{{OH_MY_ZSH_DIR}}"
+
+# Source Oh My Zsh
+source $ZSH/oh-my-zsh.sh
+
+# Init starship
+eval "$(starship init zsh)"
+
+# Function to set title
+function set_win_title(){
+    echo -ne "\033]0; $USER@$HOST:${PWD/$HOME/~} \007"
+}
+precmd_functions+=(set_win_title)
+
+# Follow color schemes - dynamically update terminal colors
+(cat "{{COLOR_SCHEME_SEQUENCES_FILE}}" &)
+
+## Plugins section: Enable fish style features
+# Use syntax highlighting
+{% if ZSH_SYNTAX_HIGHLIGHTING %}
+[ -f "{{ZSH_SYNTAX_HIGHLIGHTING}}" ] && source "{{ZSH_SYNTAX_HIGHLIGHTING}}"
+{% endif %}
+
+# Use autosuggestion
+{% if ZSH_AUTOSUGGESTIONS %}
+[ -f "{{ZSH_AUTOSUGGESTIONS}}" ] && source "{{ZSH_AUTOSUGGESTIONS}}"
+{% endif %}
+
+# Use history substring search
+{% if ZSH_HISTORY_SUBSTRING_SEARCH %}
+[ -f "{{ZSH_HISTORY_SUBSTRING_SEARCH}}" ] && source "{{ZSH_HISTORY_SUBSTRING_SEARCH}}"
+{% endif %}
+
+# Use fzf
+{% if FZF_KEY_BINDINGS %}
+[ -f "{{FZF_KEY_BINDINGS}}" ] && source "{{FZF_KEY_BINDINGS}}"
+{% endif %}
+{% if FZF_COMPLETION %}
+[ -f "{{FZF_COMPLETION}}" ] && source "{{FZF_COMPLETION}}"
+{% endif %}
+
+
+# Replace ls with exa
+alias ls='exa -al --color=always --group-directories-first --icons' # preferred listing
+alias la='exa -a --color=always --group-directories-first --icons'  # all files and dirs
+alias ll='exa -l --color=always --group-directories-first --icons'  # long format
+alias lt='exa -aT --color=always --group-directories-first --icons' # tree listing
+alias l.='exa -ald --color=always --group-directories-first --icons .*' # show only dotfiles
+
+# Cat
+alias cat='bat --style header --style snip --style changes --style header'
+
+# NVM
+# Set NVM directory to custom path
+export NVM_DIR="{{NVM_DIR}}"
+
+# Load NVM if it exists
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Load NVM bash completion (optional)
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# Pyenv
+{% if PYENV_CONFIGURED %}
+# Set Pyenv directory to custom path
+export PYENV_ROOT="{{PYENV_DIR}}"
+export PATH="$PYENV_ROOT/bin:$PATH"
+
+# Initialize pyenv (adds shims to PATH)
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+
+# Suppress IPython virtualenv warning (we're using global pyenv Python, not a venv)
+export PYTHONWARNINGS="ignore::UserWarning:IPython.core.interactiveshell"
+{% endif %}
+
+{% if COLOR_SCHEME_BIN_DIR %}
+# Color Scheme Generator
+alias color-scheme='cd {{COLOR_SCHEME_BIN_DIR}} && uv run color-scheme'
+{% endif %}
+
+{% if WALLPAPER_EFFECTS_BIN_DIR %}
+# Wallpaper Effects Generator
+alias wallpaper-effects='cd {{WALLPAPER_EFFECTS_BIN_DIR}} && uv run wallpaper-effects'
+{% endif %}

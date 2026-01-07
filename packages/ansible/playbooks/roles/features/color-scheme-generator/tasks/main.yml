@@ -1,0 +1,55 @@
+# playbooks/roles/features/color-scheme-generator/tasks/main.yml
+---
+- name: Ensure installation directory exists
+  ansible.builtin.file:
+    path: "{{ color_scheme_install_dest }}"
+    state: directory
+    mode: "0755"
+
+- name: Clone color-scheme-generator repository
+  ansible.builtin.git:
+    repo: "{{ color_scheme_repo_url }}"
+    dest: "{{ color_scheme_install_dest }}"
+    version: "{{ color_scheme_repo_version }}"
+    update: true
+    force: true
+  register: color_scheme_git_result
+
+- name: Install core dependencies
+  ansible.builtin.command:
+    cmd: uv sync
+    chdir: "{{ color_scheme_core_dir }}"
+  changed_when: color_scheme_git_result.changed
+
+- name: Install orchestrator dependencies
+  ansible.builtin.command:
+    cmd: uv sync
+    chdir: "{{ color_scheme_orchestrator_dir }}"
+  changed_when: color_scheme_git_result.changed
+
+- name: Build pywal Docker image
+  ansible.builtin.command:
+    cmd: "docker build -f orchestrator/docker/Dockerfile.pywal -t {{ color_scheme_image_pywal }}:latest ."
+    chdir: "{{ color_scheme_install_dest }}"
+  when: color_scheme_build_docker
+  changed_when: color_scheme_git_result.changed
+
+- name: Build wallust Docker image
+  ansible.builtin.command:
+    cmd: "docker build -f orchestrator/docker/Dockerfile.wallust -t {{ color_scheme_image_wallust }}:latest ."
+    chdir: "{{ color_scheme_install_dest }}"
+  when: color_scheme_build_docker
+  changed_when: color_scheme_git_result.changed
+
+- name: Verify color-scheme CLI
+  ansible.builtin.command:
+    cmd: uv run color-scheme --help
+    chdir: "{{ color_scheme_orchestrator_dir }}"
+  changed_when: false
+  failed_when: false
+  register: color_scheme_verify
+
+- name: Report installation status
+  ansible.builtin.debug:
+    msg: "color-scheme-generator installed successfully at {{ color_scheme_install_dest }}"
+  when: color_scheme_verify.rc == 0

@@ -1,0 +1,17 @@
+- name: Install nvim
+  become: true
+  ansible.builtin.package:
+    name: "{{ nvim_packages_map.get(ansible_facts['distribution'], []) }}"
+    state: present
+
+- name: Ensure destination directory exists
+  ansible.builtin.file:
+    path: "{{ nvim_config_dest }}"
+    state: directory
+    mode: "0755"
+
+- name: Copy nvim config directory
+  ansible.builtin.copy:
+    src: "{{ nvim_config_src_dir }}/"
+    dest: "{{ nvim_config_dest }}/"
+    mode: preserve

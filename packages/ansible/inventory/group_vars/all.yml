@@ -1,0 +1,8 @@
+dotfiles_root: "{{ playbook_dir }}/../../.."
+assets_root: "{{ dotfiles_root }}/assets"
+config_files_root: "{{ dotfiles_root }}/config-files"
+
+home_root: "{{ ansible_facts['env']['HOME'] }}"
+xdg_config_home: "{{ ansible_facts['env'].get('XDG_CONFIG_HOME', home_root + '/.config') }}"
+xdg_data_home: "{{ ansible_facts['env'].get('XDG_DATA_HOME', home_root + '/.local/share') }}"
+xdg_bin_home: "{{ home_root }}/.local/bin"

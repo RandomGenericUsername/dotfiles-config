@@ -1,0 +1,47 @@
+# Distribution-specific package names
+zsh_packages_map:
+  Archlinux:
+    - zsh
+    - zsh-syntax-highlighting
+    - zsh-autosuggestions
+    - zsh-history-substring-search
+    - fzf
+    - exa
+    - bat
+  Debian:
+    - zsh
+    - zsh-syntax-highlighting
+    - zsh-autosuggestions
+    # Note: zsh-history-substring-search not in default repos
+    - fzf
+    - exa
+    - bat
+  Fedora:
+    - zsh
+    - zsh-syntax-highlighting
+    - zsh-autosuggestions
+    # Note: zsh-history-substring-search may need EPEL
+    - fzf
+    - exa
+    - bat
+
+# Distribution-specific plugin paths (from /tmp/config/packages/{distro}/system.toml)
+zsh_plugin_paths_map:
+  Archlinux:
+    syntax_highlighting: "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    autosuggestions: "/usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    history_substring_search: "/usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh"
+    fzf_key_bindings: "/usr/share/fzf/key-bindings.zsh"
+    fzf_completion: "/usr/share/fzf/completion.zsh"
+  Debian:
+    syntax_highlighting: "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    autosuggestions: "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    history_substring_search: ""  # Not available in default repos
+    fzf_key_bindings: "/usr/share/doc/fzf/examples/key-bindings.zsh"
+    fzf_completion: "/usr/share/doc/fzf/examples/completion.zsh"
+  Fedora:
+    syntax_highlighting: "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    autosuggestions: "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    history_substring_search: ""  # Not available in default repos
+    fzf_key_bindings: "/usr/share/fzf/shell/key-bindings.zsh"
+    fzf_completion: ""  # Not included in Fedora's fzf package
