@@ -1,0 +1,20 @@
+[project]
+name = "dotfiles-icon-templates"
+version = "0.1.0"
+description = "Icon template management for dotfiles"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "typer>=0.9.0",
+]
+
+[project.scripts]
+dotfiles-icon-templates = "dotfiles_icon_templates.cli:app"
+
+[build-system]
+requires = ["uv_build>=0.9.22,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
