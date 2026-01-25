@@ -1,0 +1,29 @@
+# Destination paths
+zsh_config_dest: "{{ home_root }}/.zshrc"
+zsh_template_src: "{{ config_files_root }}/zsh/.zshrc.j2"
+
+# Whether to use distribution-specific plugin paths (set to false to use custom paths)
+zsh_use_distro_paths: true
+
+# Required template variables
+STARSHIP_CONFIG: "{{ xdg_config_home }}/starship/starship.toml"
+OH_MY_ZSH_DIR: "{{ home_root }}/.oh-my-zsh"
+COLOR_SCHEME_SEQUENCES_FILE: "{{ xdg_data_home }}/themes/sequences"
+NVM_DIR: "{{ home_root }}/.nvm"
+
+# Optional plugin paths (overridden by distro-specific values when zsh_use_distro_paths is true)
+ZSH_SYNTAX_HIGHLIGHTING: ""
+ZSH_AUTOSUGGESTIONS: ""
+ZSH_HISTORY_SUBSTRING_SEARCH: ""
+FZF_KEY_BINDINGS: ""
+FZF_COMPLETION: ""
+
+# Pyenv configuration (disabled by default)
+PYENV_CONFIGURED: false
+PYENV_DIR: "{{ home_root }}/.pyenv"
+
+# Color scheme generator path (empty by default, set when role is installed)
+COLOR_SCHEME_BIN_DIR: ""
+
+# Wallpaper effects generator path (empty by default, set when role is installed)
+WALLPAPER_EFFECTS_BIN_DIR: ""

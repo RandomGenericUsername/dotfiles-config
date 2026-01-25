@@ -1,0 +1,5 @@
+# playbooks/roles/features/wallpaper-effects-generator/vars/main.yml
+---
+# Internal constants (not meant to be overridden)
+wallpaper_effects_core_dir: "{{ wallpaper_effects_install_dest }}/core"
+wallpaper_effects_orchestrator_dir: "{{ wallpaper_effects_install_dest }}/orchestrator"

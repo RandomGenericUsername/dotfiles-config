@@ -1,0 +1,18 @@
+# playbooks/roles/features/color-scheme-generator/defaults/main.yml
+---
+# Installation destination (override with -e color_scheme_install_dest=/path)
+color_scheme_install_dest: "{{ xdg_data_home }}/color-scheme-generator"
+
+# Repository configuration
+color_scheme_repo_url: "https://github.com/RandomGenericUsername/color-scheme-generator"
+color_scheme_repo_version: "master"
+
+# Docker build toggle
+color_scheme_build_docker: true
+
+# Docker image names
+color_scheme_image_pywal: "color-scheme-pywal"
+color_scheme_image_wallust: "color-scheme-wallust"
+
+# For zsh template integration
+COLOR_SCHEME_BIN_DIR: "{{ color_scheme_install_dest }}/orchestrator"

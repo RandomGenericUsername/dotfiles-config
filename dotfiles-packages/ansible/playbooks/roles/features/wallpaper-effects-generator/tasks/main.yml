@@ -1,0 +1,48 @@
+# playbooks/roles/features/wallpaper-effects-generator/tasks/main.yml
+---
+- name: Ensure installation directory exists
+  ansible.builtin.file:
+    path: "{{ wallpaper_effects_install_dest }}"
+    state: directory
+    mode: "0755"
+
+- name: Clone wallpaper-effects-generator repository
+  ansible.builtin.git:
+    repo: "{{ wallpaper_effects_repo_url }}"
+    dest: "{{ wallpaper_effects_install_dest }}"
+    version: "{{ wallpaper_effects_repo_version }}"
+    update: true
+    force: true
+  register: wallpaper_effects_git_result
+
+- name: Install core dependencies
+  ansible.builtin.command:
+    cmd: uv sync
+    chdir: "{{ wallpaper_effects_core_dir }}"
+  changed_when: wallpaper_effects_git_result.changed
+
+- name: Install orchestrator dependencies
+  ansible.builtin.command:
+    cmd: uv sync
+    chdir: "{{ wallpaper_effects_orchestrator_dir }}"
+  changed_when: wallpaper_effects_git_result.changed
+
+- name: Build wallpaper-effects Docker image
+  ansible.builtin.command:
+    cmd: "docker build -f orchestrator/docker/Dockerfile.imagemagick -t {{ wallpaper_effects_image }}:latest ."
+    chdir: "{{ wallpaper_effects_install_dest }}"
+  when: wallpaper_effects_build_docker
+  changed_when: wallpaper_effects_git_result.changed
+
+- name: Verify wallpaper-effects CLI
+  ansible.builtin.command:
+    cmd: uv run wallpaper-effects --help
+    chdir: "{{ wallpaper_effects_orchestrator_dir }}"
+  changed_when: false
+  failed_when: false
+  register: wallpaper_effects_verify
+
+- name: Report installation status
+  ansible.builtin.debug:
+    msg: "wallpaper-effects-generator installed successfully at {{ wallpaper_effects_install_dest }}"
+  when: wallpaper_effects_verify.rc == 0
